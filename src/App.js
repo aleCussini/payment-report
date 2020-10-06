@@ -8,7 +8,7 @@ import {TransactionList} from "./transactions/TransactionList";
 import {TransactionShow} from "./transactions/TransactionShow";
 
 firebase.initializeApp({
-  apiKey: "AIzaSyCkMv4ZkQhj799LdGR7twelZXakT0yMHU0",
+    apiKey: "AIzaSyCkMv4ZkQhj799LdGR7twelZXakT0yMHU0",
     authDomain: "payment-report-a44a2.firebaseapp.com",
     databaseURL: "https://payment-report-a44a2.firebaseio.com",
     projectId: "payment-report-a44a2",
@@ -18,66 +18,66 @@ firebase.initializeApp({
 })
 
 const TransactionEdit = props => {
-  return (
-      <Edit {...props}>
-          <TransactionForm/>
-      </Edit>
-  )
+    return (
+        <Edit {...props}>
+            <TransactionForm/>
+        </Edit>
+    )
 }
 
 const TransactionCreate = props => {
-  return (
-      <Create {...props}>
-          <TransactionForm/>
-      </Create>
-  )
+    return (
+        <Create {...props}>
+            <TransactionForm/>
+        </Create>
+    )
 }
 
 function App() {
-  return (
-      <Admin title="Payment Report" dataProvider={firebaseDataProvider(firebase,{})}>
-                  <Resource
-                      name={"castro"}
-                      options={{label: 'ENI - Castro dei Volsci'}}
-                      list={TransactionList}
-                      edit={TransactionEdit}
-                      show={TransactionShow}
-                      create={TransactionCreate}
-                  />
-                  <Resource
-                      name={"patrica"}
-                      options={{label: 'ENI - Patrica'}}               
-                      list={TransactionList}
-                      edit={TransactionEdit}
-                      show={TransactionShow}
-                      create={TransactionCreate}      
-                  />
-                  <Resource
-                      name={"sonnino"}
-                      options={{label: 'ENI - Sonnino'}}      
-                      list={TransactionList}
-                      edit={TransactionEdit}
-                      show={TransactionShow}
-                      create={TransactionCreate}              
-                  />
-                  <Resource
-                      name={"prossedi"}
-                      options={{label: 'Q8 - Prossedi'}}    
-                      list={TransactionList}
-                      edit={TransactionEdit}
-                      show={TransactionShow}
-                      create={TransactionCreate}                
-                  />
-                  <Resource
-                      name={"summary"}
-                      options={{label: 'Aggregati'}}    
-                      list={TransactionList}
-                      edit={TransactionEdit}
-                      show={TransactionShow}
-                      create={TransactionCreate}                
-                  />
+    return (
+        <Admin title="Payment Report" dataProvider={firebaseDataProvider(firebase, {})}>
+            <Resource
+                name={"castro"}
+                options={{label: 'ENI - Castro dei Volsci'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"patrica"}
+                options={{label: 'ENI - Patrica'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"sonnino"}
+                options={{label: 'ENI - Sonnino'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"prossedi"}
+                options={{label: 'Q8 - Prossedi'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"summary"}
+                options={{label: 'Aggregati'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
         </Admin>
-  );
+    );
 }
 
 export default App;

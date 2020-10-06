@@ -2,10 +2,11 @@ import {Datagrid, DateField, List, NumberField} from "react-admin";
 import React from "react";
 
 export const TransactionList = props => {
+    const label = props.options.label;
     return (
-        <List {...props} title={"Lista Transazioni " + props.options.label}>
+        <List {...props} title={"Lista Transazioni " + label}>
             <Datagrid rowClick={"show"}>
-                <NumberField source={"masterCard"}/>
+                {label.toLowerCase().includes("castro") ? <NumberField source={"masterCard"}/> : console.log("CODDIO")}
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
                 <NumberField source={"amex"}/>

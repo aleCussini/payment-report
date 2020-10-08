@@ -3,7 +3,7 @@ import React from "react";
 
 export const TransactionShow = props => {
     return (
-        <Show title={<TransactionTitle/>} {...props}>
+        <Show title={<TransactionTitle props={props}/>} {...props}>
             <SimpleShowLayout>
                 <NumberField source={"masterCard"}/>
                 <NumberField source={"maestro"}/>
@@ -26,6 +26,6 @@ export const TransactionShow = props => {
     )
 }
 
-const TransactionTitle = ({record}) => {
-    return <span>{record.id}</span>;
+const TransactionTitle = ({props, record}) => {
+    return <span>{props.options.label + " " + record.date}</span>;
 };

@@ -3,10 +3,12 @@ import React from "react";
 
 export const TransactionList = props => {
     const label = props.options.label;
+    const id = props.options.id;
+    console.log(id)
     return (
         <List {...props} title={"Lista Transazioni " + label}>
             <Datagrid rowClick={"show"}>
-                {label.toLowerCase().includes("castro") ? <NumberField source={"masterCard"}/> : console.log("CODDIO")}
+                <NumberField source={"masterCard"}/>
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
                 <NumberField source={"amex"}/>

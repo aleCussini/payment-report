@@ -61,7 +61,7 @@ function App() {
         <Admin title="Payment Report" dataProvider={firebaseDataProvider(firebase, {})}>
             <Resource
                 name={"castro"}
-                options={{label: 'Castro dei Volsci'}}
+                options={{label: 'Castro dei Volsci',id:'castro'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -70,7 +70,7 @@ function App() {
             />
             <Resource
                 name={"patrica"}
-                options={{label: 'Patrica'}}
+                options={{label: 'Patrica', id:'patrica'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -79,7 +79,7 @@ function App() {
             />
             <Resource
                 name={"sonnino"}
-                options={{label: 'Sonnino'}}
+                options={{label: 'Sonnino', id:'sonnino'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -88,7 +88,7 @@ function App() {
             />
             <Resource
                 name={"prossedi"}
-                options={{label: 'Prossedi'}}
+                options={{label: 'Prossedi', id:'prossedi'}}
                 icon={Q8Icon}
                 list={TransactionList}
                 edit={TransactionEdit}

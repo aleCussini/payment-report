@@ -6,6 +6,7 @@ export const TransactionList = props => {
     return (
         <List {...props} title={"Lista Transazioni " + label}>
             <Datagrid rowClick={"show"}>
+                <DateField source={"date"}/>
                 <NumberField source={"masterCard"}/>
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
@@ -21,7 +22,6 @@ export const TransactionList = props => {
                 <NumberField source={"elettroBlu"}/>
                 <NumberField source={"dkv"}/>
                 <NumberField source={"selfBancomat"}/>
-                <DateField source={"date"}/>
             </Datagrid>
         </List>
     )

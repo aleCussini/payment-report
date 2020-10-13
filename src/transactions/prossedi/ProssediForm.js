@@ -4,6 +4,7 @@ import React from "react";
 export const ProssediForm = props => {
     return (
         <SimpleForm {...props}>
+            <DateInput source={"date"}/>
             <NumberInput source={"amex"}/>
             <NumberInput source={"masterCard"}/>
             <NumberInput source={"maestro"}/>
@@ -13,10 +14,9 @@ export const ProssediForm = props => {
             <NumberInput source={"unionPay"}/>
             <NumberInput source={"selfBancomat"}/>
             <NumberInput source={"elettroBlu"}/>
-            <NumberInput source={"carteQ8"} />
-            <NumberInput source={"carteQ8Self"} />
-            <DateInput source={"date"}/>
+            <NumberInput source={"carteQ8"}/>
+            <NumberInput source={"carteQ8Self"}/>
             <FileInput source={"receipt"}/>
         </SimpleForm>
-    )    
+    )
 }

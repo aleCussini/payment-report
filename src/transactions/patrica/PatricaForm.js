@@ -4,6 +4,7 @@ import React from "react";
 export const PatricaForm = props => {
     return (
         <SimpleForm {...props}>
+            <DateInput source={"date"}/>
             <NumberInput source={"amex"}/>
             <NumberInput source={"masterCard"}/>
             <NumberInput source={"maestro"}/>
@@ -17,10 +18,9 @@ export const PatricaForm = props => {
             <NumberInput source={"multicardRoutex"}/>
             <NumberInput source={"cartaDiCreditoGenerica"}/>
             <NumberInput source={"elettroBlu"}/>
-            <NumberInput source={"uta"} />
+            <NumberInput source={"uta"}/>
             <NumberInput source={"dkv"}/>
-            <DateInput source={"date"}/>
             <FileInput source={"receipt"}/>
         </SimpleForm>
-    )    
+    )
 }

@@ -4,7 +4,7 @@ import React from "react";
 export const CastroForm = props => {
     return (
         <SimpleForm {...props}>
-            <FileInput source={"receipt"}/>
+            <DateInput source={"date"}/>
             <NumberInput source={"masterCard"}/>
             <NumberInput source={"maestro"}/>
             <NumberInput source={"visa"}/>
@@ -19,7 +19,7 @@ export const CastroForm = props => {
             <NumberInput source={"cartaDiCreditoGenerica"}/>
             <NumberInput source={"elettroBlu"}/>
             <NumberInput source={"dkv"}/>
-            <DateInput source={"date"}/>
+            <FileInput source={"receipt"}/>
         </SimpleForm>
     )
 }

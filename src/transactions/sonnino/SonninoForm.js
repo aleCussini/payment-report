@@ -4,6 +4,7 @@ import React from "react";
 export const SonninoForm = props => {
     return (
         <SimpleForm {...props}>
+            <DateInput source={"date"}/>
             <NumberInput source={"amex"}/>
             <NumberInput source={"masterCard"}/>
             <NumberInput source={"maestro"}/>
@@ -17,9 +18,8 @@ export const SonninoForm = props => {
             <NumberInput source={"multicardRoutex"}/>
             <NumberInput source={"cartaDiCreditoGenerica"}/>
             <NumberInput source={"elettroBlu"}/>
-            <NumberInput source={"uta"} />
-            <DateInput source={"date"}/>
+            <NumberInput source={"uta"}/>
             <FileInput source={"receipt"}/>
         </SimpleForm>
-    )    
+    )
 }

@@ -8,16 +8,6 @@ import {TransactionList} from "./transactions/TransactionList";
 import {TransactionShow} from "./transactions/TransactionShow";
 import Icon from "@material-ui/core/Icon";
 
-firebase.initializeApp({
-    apiKey: "AIzaSyCkMv4ZkQhj799LdGR7twelZXakT0yMHU0",
-    authDomain: "payment-report-a44a2.firebaseapp.com",
-    databaseURL: "https://payment-report-a44a2.firebaseio.com",
-    projectId: "payment-report-a44a2",
-    storageBucket: "payment-report-a44a2.appspot.com",
-    messagingSenderId: "243114162369",
-    appId: "1:243114162369:web:6955b899b7c5a018d1bc40"
-})
-
 function EniIcon(props) {
     return (
         <Icon {...props}>
@@ -43,7 +33,7 @@ function Q8Icon(props) {
 const TransactionEdit = props => {
     return (
         <Edit {...props}>
-            <TransactionForm/>
+            <TransactionForm {...props}/>
         </Edit>
     )
 }
@@ -51,7 +41,7 @@ const TransactionEdit = props => {
 const TransactionCreate = props => {
     return (
         <Create {...props}>
-            <TransactionForm/>
+            <TransactionForm {...props}/>
         </Create>
     )
 }
@@ -61,7 +51,7 @@ function App() {
         <Admin title="Payment Report" dataProvider={firebaseDataProvider(firebase, {})}>
             <Resource
                 name={"castro"}
-                options={{label: 'Castro dei Volsci',id:'castro'}}
+                options={{label: 'Castro dei Volsci', id: 'castro'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -70,7 +60,7 @@ function App() {
             />
             <Resource
                 name={"patrica"}
-                options={{label: 'Patrica', id:'patrica'}}
+                options={{label: 'Patrica', id: 'patrica'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -79,7 +69,7 @@ function App() {
             />
             <Resource
                 name={"sonnino"}
-                options={{label: 'Sonnino', id:'sonnino'}}
+                options={{label: 'Sonnino', id: 'sonnino'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -88,7 +78,7 @@ function App() {
             />
             <Resource
                 name={"prossedi"}
-                options={{label: 'Prossedi', id:'prossedi'}}
+                options={{label: 'Prossedi', id: 'prossedi'}}
                 icon={Q8Icon}
                 list={TransactionList}
                 edit={TransactionEdit}
@@ -96,7 +86,7 @@ function App() {
                 create={TransactionCreate}
             />
             <Resource
-                name={"summary"}
+                name={"summaries"}
                 options={{label: 'Aggregati'}}
                 list={TransactionList}
                 edit={TransactionEdit}

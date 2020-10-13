@@ -3,8 +3,6 @@ import React from "react";
 
 export const TransactionList = props => {
     const label = props.options.label;
-    const id = props.options.id;
-    console.log(id)
     return (
         <List {...props} title={"Lista Transazioni " + label}>
             <Datagrid rowClick={"show"}>

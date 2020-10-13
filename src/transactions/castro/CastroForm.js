@@ -21,5 +21,5 @@ export const CastroForm = props => {
             <NumberInput source={"dkv"}/>
             <DateInput source={"date"}/>
         </SimpleForm>
-    )    
+    )
 }

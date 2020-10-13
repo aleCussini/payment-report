@@ -14,9 +14,36 @@ export const TransactionForm = props => {
         let date = newChild.date;
         console.log("child added ", newChild)
         console.log("child added with date ", date)
-        newChild.id = date
-        db.ref('summaries').child(date).update(newChild).then(r => console.log('r', r))
+
+        let childRef = db.ref('temp-summaries').child(date);
+
+        childRef.once("value", snapshot => {
+            const oldChild = snapshot.val();
+            let newVar = oldChild ? updateChild(oldChild.value, newChild) : newChild;
+            db.ref('summaries').child(date).update(newVar).then(value => console.log(value))
+            childRef.set({
+                "value": newVar,
+                "prev_value": oldChild ? oldChild.value : null
+            }).then(value => {
+                console.log(value)
+            })
+        }).then(r => console.log(r))
     })
+
+    function updateChild(oldChild, newChild) {
+        let ks = []
+        let keys = Object.keys(oldChild);
+        keys.forEach(value => {
+            if (value !== 'date' && value !== 'id' && value !== 'receipt') {
+                ks.push(value)
+            }
+        })
+        console.log('keys', ks);
+        ks.forEach(k => {
+            newChild[k] += oldChild[k];
+        });
+        return newChild;
+    }
 
     switch (id) {
         case "castro" :

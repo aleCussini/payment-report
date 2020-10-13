@@ -19,7 +19,7 @@ export const TransactionForm = props => {
 
         childRef.once("value", snapshot => {
             const oldChild = snapshot.val();
-            let newVar = oldChild ? updateChild(oldChild.value, newChild) : newChild;
+            const newVar = oldChild ? updateChild(oldChild.value, newChild) : newChild;
             db.ref('summaries').child(date).update(newVar).then(value => console.log(value))
             childRef.set({
                 "value": newVar,

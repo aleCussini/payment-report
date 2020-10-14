@@ -40,6 +40,8 @@ export const TransactionForm = props => {
         })
         console.log('keys', ks);
         ks.forEach(k => {
+            oldChild[k] = oldChild[k] ? oldChild[k] : 0;
+            newChild[k] = newChild[k] ? newChild[k] : 0;
             newChild[k] += oldChild[k];
         });
         return newChild;

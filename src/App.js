@@ -87,7 +87,15 @@ function App() {
             />
             <Resource
                 name={"summaries"}
-                options={{label: 'Aggregati'}}
+                options={{label: 'Aggregati', id: 'summaries'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"report"}
+                options={{label: 'Report', id: 'report'}}
                 list={TransactionList}
                 edit={TransactionEdit}
                 show={TransactionShow}

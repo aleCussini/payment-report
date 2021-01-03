@@ -24,3 +24,4 @@ yarn-error.log*
 /package-lock.json
 /.idea/
 /src/firebase/firebase.js
+public/Accredito Carte.xlsx

@@ -4,7 +4,7 @@ import CSVReader from 'react-csv-reader'
 import db from "../../firebase/firebase-db"
 import { array } from "prop-types";
 
-const   AMEX = 'AMEX', EDCM = 'EDC.M.', 
+const   AMEX = 'AMEX', EDCM = 'EDC', 
         VISACR = 'VISACR', MASTER = 'MASTER', 
         KUWAIT = 'KUWAIT', PAGOBANCOMAT = 'INCASSO POS DEL',
         ENI = 'ENI SPA', ELETTROBLU = 'elettroblu'
@@ -14,34 +14,49 @@ const paymentType1 = {AMEX, EDCM, VISACR, MASTER}
 export const ReportForm = props => {
     return (
         <SimpleForm {...props}>
-            <CSVReader onFileLoaded={(data, fileInfo) => readReport(data) /*console.dir(data, fileInfo)*/} label='Caricare il tracciato in formato CSV (In excel salvare il foglio attivo con estensione CSV, valori separati da virgola)'/>
+            <CSVReader 
+                onFileLoaded={(data, fileInfo) => readReport(data) /*console.dir(data, fileInfo)*/} 
+                label='Caricare il tracciato in formato CSV (In excel salvare il foglio attivo con estensione CSV, valori separati da virgola)'/>
         </SimpleForm>
     )
 
     function readReport(data){
         data.map((record, index) => {
+            let toSave=false
+            let obj = {}
             let description = record[2]
             let amount = record[3]
             if(description.includes(AMEX) || description.includes(EDCM) || description.includes(VISACR) || description.includes(MASTER)){              
-                let obj = getRecordInfo(description)
+                obj = getRecordInfo(description)
+                toSave=true
                 console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
             }
-            else if (description.includes(KUWAIT)){
-                let obj = getKuwaitInfo(description)
+            /*else if (description.includes(KUWAIT)){
+                obj = getKuwaitInfo(description)
                 console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
-            }
+            }*/
             else if (description.includes(PAGOBANCOMAT)){
-                let obj = getPagobancomatInfo(description)
+                obj = getPagobancomatInfo(description)
+                toSave=true
                 console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
             }
             else if (description.includes(ENI)){
-                let obj = getEniInfo(description)
+                obj = getEniInfo(description)
+                toSave=true
                 console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
             }
-            else if (description.includes(ELETTROBLU)){
-                let obj = getElettrobluInfo(description)
-            }
+            /*else if (description.includes(ELETTROBLU)){
+                obj = getElettrobluInfo(description)
+            }*/
             
+            if(toSave){
+                let reportRef = db.ref('/report/'+obj.date+'/'+obj.paymentType)            
+                let paymentType= obj.paymentType
+                reportRef.set({
+                    amount: amount
+                });
+                console.log('updated for date: ', obj.date, ' and payment type: ', obj.paymentType, ' amount: ', amount)
+            }
         })
     }
 
@@ -50,7 +65,7 @@ export const ReportForm = props => {
         let info = descriptionToSub.substring(12,29).trim();
         let infoArray = info.split(' ');
         let dateToFormat = infoArray[0];
-        let paymentType = infoArray[1];
+        let paymentType = infoArray[1].replaceAll('.','');
         let arrayDate = dateToFormat.split('/')
         let date = '20' + arrayDate[2] + '-' + arrayDate[1] + '-' + arrayDate[0]
         let obj = {
@@ -75,7 +90,7 @@ export const ReportForm = props => {
     function getPagobancomatInfo(descriptionToSub){
         let dateToFormat = descriptionToSub.substring(16,24)
         let arrayDate = dateToFormat.split('/')
-        let month = arrayDate[1] <10 ? '0' + arrayDate[1] :  arrayDate[1]
+        let month = arrayDate[1]
         let date = '20' + arrayDate[2]+'-' + month + '-' + arrayDate[0]
         let obj = {
             date : date,
@@ -99,4 +114,5 @@ export const ReportForm = props => {
     function getElettrobluInfo(descriptionToSub){
         
     }
+
 }

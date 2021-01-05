@@ -39,9 +39,6 @@ export const ProssediForm = props => {
                                 <Box flex={1} mr="0.5em">
                                     <NumberInput source={"selfBancomat"} fullWidth/>
                                 </Box>
-                                <Box flex={1} mr="0.5em">
-                                    <NumberInput source={""} fullWidth/>
-                                </Box>
                             </Box>
                             <Box display="flex">
                                 <Box flex={1} mr="0.5em">

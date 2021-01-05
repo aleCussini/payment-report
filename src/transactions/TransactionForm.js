@@ -8,45 +8,76 @@ import db from "../firebase/firebase-db";
 
 export const TransactionForm = props => {
 
+    
+    
     const id = props.options.id;
 
-    db.ref(id).on("child_added", a => {
-        let newChild = a.val();
-        let date = newChild.date;
-        console.log("child added ", newChild)
-        console.log("child added with date ", date)
+    /*
 
-        let childRef = db.ref('temp-summaries').child(date);
+        if(id!='report' && id!= 'summaries'){
+            db.ref(id).on("child_added", a => {
+                let newChild = a.val();
+                let date = newChild.date;
+                console.log("child added ", newChild)
+                console.log("child added with date ", date)
 
-        childRef.once("value", snapshot => {
-            const oldChild = snapshot.val();
-            const newVar = oldChild ? updateChild(oldChild.value, newChild) : newChild;
-            db.ref('summaries').child(date).update(newVar).then(value => console.log(value))
-            childRef.set({
-                "value": newVar,
-                "prev_value": oldChild ? oldChild.value : null
-            }).then(value => {
-                console.log(value)
-            })
-        }).then(r => console.log(r))
-    })
+                let summariesRef = db.ref('summaries/' + date)
+                summariesRef.once('value', snapshot => {
+                    let childToUpdate = snapshot.val()
+                    if(childToUpdate==null){
+                        summariesRef.set({date: date,
+                            amex: parseInt(newChild.amex),
+                            visa: parseInt(newChild.visa),
+                            eniBce: parseInt(newChild.eniBce),
+                            masterCard: parseInt(newChild.masterCard),
+                            pagobancomat: parseInt(newChild.pagobancomat)
+                        })
+                    }else {
+                        console.log(childToUpdate)
+                        summariesRef.update({
+                            amex: childToUpdate.amex == null ? parseInt(newChild.amex) : (parseInt(childToUpdate.amex) + parseInt(newChild.amex)),
+                            visa: childToUpdate.visa == null ?  parseInt(newChild.visa) : (parseInt(childToUpdate.visa) + parseInt(newChild.visa)),
+                            eniBce: childToUpdate.eniBce == null ?  parseInt(newChild.eniBce) : (parseInt(childToUpdate.eniBce) + parseInt(newChild.eniBce)),
+                            masterCard: childToUpdate.masterCard == null ? parseInt(newChild.masterCard) :  (parseInt(childToUpdate.masterCard) + parseInt(newChild.masterCard)),
+                            pagobancomat: childToUpdate.pagobancomat == null ? parseInt(newChild.pagobancomat) : (parseInt(childToUpdate.pagobancomat) + parseInt(newChild.pagobancomat))
+                        })
+                    }
+                })
 
-    function updateChild(oldChild, newChild) {
-        let ks = []
-        let keys = Object.keys(oldChild);
-        keys.forEach(value => {
-            if (value !== 'date' && value !== 'id' && value !== 'receipt') {
-                ks.push(value)
-            }
+            /*let childRef = db.ref('temp-summaries').child(date);
+
+            childRef.once("value", snapshot => {
+                const oldChild = snapshot.val();
+                const newVar = oldChild ? updateChild(oldChild.value, newChild) : newChild;
+                db.ref('summaries').child(date).update(newVar).then(value => console.log(value))
+                childRef.set({
+                    "value": newVar,
+                    "prev_value": oldChild ? oldChild.value : null
+                }).then(value => {
+                    console.log(value)
+                })
+            }).then(r => console.log(r)) 
         })
-        console.log('keys', ks);
-        ks.forEach(k => {
-            oldChild[k] = oldChild[k] ? oldChild[k] : 0;
-            newChild[k] = newChild[k] ? newChild[k] : 0;
-            newChild[k] += oldChild[k];
-        });
-        return newChild;
-    }
+
+        
+
+        function updateChild(oldChild, newChild) {
+            let ks = []
+            let keys = Object.keys(oldChild);
+            keys.forEach(value => {
+                if (value !== 'date' && value !== 'id' && value !== 'receipt') {
+                    ks.push(value)
+                }
+            })
+            console.log('keys', ks);
+            ks.forEach(k => {
+                oldChild[k] = oldChild[k] ? oldChild[k] : 0;
+                newChild[k] = newChild[k] ? newChild[k] : 0;
+                newChild[k] += oldChild[k];
+            });
+            return newChild;
+        }
+    }*/
 
     switch (id) {
         case "castro" :

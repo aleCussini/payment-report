@@ -7,6 +7,8 @@ import {TransactionForm} from "./transactions/TransactionForm";
 import {TransactionList} from "./transactions/TransactionList";
 import {TransactionShow} from "./transactions/TransactionShow";
 import Icon from "@material-ui/core/Icon";
+import {customDataProvider} from "./customDataProvider";
+import {authProvider} from "./customDataProvider"
 
 function EniIcon(props) {
     return (
@@ -48,14 +50,14 @@ const TransactionCreate = props => {
 
 function App() {
     return (
-        <Admin title="Payment Report" dataProvider={firebaseDataProvider(firebase, {})}>
+        <Admin title="Payment Report" dataProvider={customDataProvider}>
             <Resource
                 name={"castro"}
                 options={{label: 'Castro dei Volsci', id: 'castro'}}
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
-                show={TransactionShow}
+                show={TransactionEdit}
                 create={TransactionCreate}
             />
             <Resource
@@ -64,7 +66,7 @@ function App() {
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
-                show={TransactionShow}
+                show={TransactionEdit}
                 create={TransactionCreate}
             />
             <Resource
@@ -73,7 +75,7 @@ function App() {
                 icon={EniIcon}
                 list={TransactionList}
                 edit={TransactionEdit}
-                show={TransactionShow}
+                show={TransactionEdit}
                 create={TransactionCreate}
             />
             <Resource
@@ -82,7 +84,7 @@ function App() {
                 icon={Q8Icon}
                 list={TransactionList}
                 edit={TransactionEdit}
-                show={TransactionShow}
+                show={TransactionEdit}
                 create={TransactionCreate}
             />
             <Resource

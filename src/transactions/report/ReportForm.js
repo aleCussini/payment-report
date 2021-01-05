@@ -1,4 +1,4 @@
-import {SimpleForm} from "react-admin";
+import {SimpleForm, NumberInput, DateInput} from "react-admin";
 import React from "react";
 import CSVReader from 'react-csv-reader'
 import db from "../../firebase/firebase-db"
@@ -17,50 +17,59 @@ export const ReportForm = props => {
             <CSVReader 
                 onFileLoaded={(data, fileInfo) => readReport(data) /*console.dir(data, fileInfo)*/} 
                 label='Caricare il tracciato in formato CSV (In excel salvare il foglio attivo con estensione CSV, valori separati da virgola)'/>
+            <DateInput source={"date"}/>
+            <NumberInput source={"masterCard"} id='masterCard'/>
+            <NumberInput source={"maestro"}/>
+            <NumberInput source={"visa"}/>
+            <NumberInput source={"amex"}/>
+            <NumberInput source={"diners"}/>
+            <NumberInput source={"pagobancomat"}/>
+            <NumberInput source={"unisona"}/>
+            <NumberInput source={"selfBancomat"}/>
+            <NumberInput source={"eniMobilePayments"}/>
+            <NumberInput source={"eniBce"}/>
+            <NumberInput source={"multicardRoutex"}/>
+            <NumberInput source={"cartaDiCreditoGenerica"}/>
+            <NumberInput source={"elettroBlu"}/>
+            <NumberInput source={"dkv"}/>
         </SimpleForm>
     )
 
     function readReport(data){
         data.map((record, index) => {
-            let toSave=false
-            let obj = {}
             let description = record[2]
             let amount = record[3]
-            if(description.includes(AMEX) || description.includes(EDCM) || description.includes(VISACR) || description.includes(MASTER)){              
-                obj = getRecordInfo(description)
-                toSave=true
-                console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
+            if(description.includes(AMEX)){
+                let ref = db.ref('/report/').child(getCommonDate(description))
+                ref.update({ amex:amount, date:  getCommonDate(description)})
+            }
+            else if(description.includes(EDCM)){              
+                let ref = db.ref('/report/').child(getCommonDate(description))
+                ref.update ({ edcm: amount , date: getCommonDate(description)})
+            }
+            else if(description.includes(VISACR)){              
+                let ref = db.ref('/report/').child(getCommonDate(description))
+                ref.update({ visa: amount, date: getCommonDate(description)})
+            }
+            else if(description.includes(MASTER)){              
+                let ref = db.ref('/report/').child(getCommonDate(description))
+                ref.update({ masterCard: amount, date: getCommonDate(description)})
             }
             /*else if (description.includes(KUWAIT)){
                 obj = getKuwaitInfo(description)
-                console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
             }*/
             else if (description.includes(PAGOBANCOMAT)){
-                obj = getPagobancomatInfo(description)
-                toSave=true
-                console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
+                let ref = db.ref('/report/').child(getPagobancomatDate(description))
+                ref.update({ pagobancomat : amount, date: getPagobancomatDate(description)})
             }
             else if (description.includes(ENI)){
-                obj = getEniInfo(description)
-                toSave=true
-                console.log('[' + obj.paymentType +'] date: ', obj.date,' amount: ', amount)
-            }
-            /*else if (description.includes(ELETTROBLU)){
-                obj = getElettrobluInfo(description)
-            }*/
-            
-            if(toSave){
-                let reportRef = db.ref('/report/'+obj.date+'/'+obj.paymentType)            
-                let paymentType= obj.paymentType
-                reportRef.set({
-                    amount: amount
-                });
-                console.log('updated for date: ', obj.date, ' and payment type: ', obj.paymentType, ' amount: ', amount)
+                let ref = db.ref('/report/').child(getEniDate(description))
+                ref.update({eniBce : amount, date: getEniDate(description)})
             }
         })
     }
 
-    function getRecordInfo(descriptionToSub){
+    function getCommonDate(descriptionToSub){
         // es INCASSO POS 29/08/19 AMEX    CONV. 3898566 / 00001
         let info = descriptionToSub.substring(12,29).trim();
         let infoArray = info.split(' ');
@@ -68,11 +77,7 @@ export const ReportForm = props => {
         let paymentType = infoArray[1].replaceAll('.','');
         let arrayDate = dateToFormat.split('/')
         let date = '20' + arrayDate[2] + '-' + arrayDate[1] + '-' + arrayDate[0]
-        let obj = {
-            date : date,
-            paymentType : paymentType
-        }
-        return obj;
+        return date;
     }
 
     function getKuwaitInfo(descriptionToSub){
@@ -87,29 +92,21 @@ export const ReportForm = props => {
         return obj;
     }
 
-    function getPagobancomatInfo(descriptionToSub){
+    function getPagobancomatDate(descriptionToSub){
         let dateToFormat = descriptionToSub.substring(16,24)
         let arrayDate = dateToFormat.split('/')
         let month = arrayDate[1]
         let date = '20' + arrayDate[2]+'-' + month + '-' + arrayDate[0]
-        let obj = {
-            date : date,
-            paymentType : 'PAGOBANCOMAT'
-        }
-        return obj;
+        return date;
     }
 
-    function getEniInfo(descriptionToSub){
+    function getEniDate(descriptionToSub){
         let dateToFormat = descriptionToSub.substring(110,118)
         let day = dateToFormat.substring(0,2)
         let month = dateToFormat.substring(2,4)
         let year = dateToFormat.substring(4,8)
         let date = year + '-' + month + '-' + day
-        let obj = {
-            date : date,
-            paymentType : 'ENI'
-        }
-        return obj;
+        return date;
     }
     function getElettrobluInfo(descriptionToSub){
         

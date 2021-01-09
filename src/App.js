@@ -9,6 +9,7 @@ import {TransactionShow} from "./transactions/TransactionShow";
 import Icon from "@material-ui/core/Icon";
 import {customDataProvider} from "./customDataProvider";
 import {authProvider} from "./customDataProvider"
+import CustomLayout from './CustomLayout'
 
 function EniIcon(props) {
     return (
@@ -50,7 +51,7 @@ const TransactionCreate = props => {
 
 function App() {
     return (
-        <Admin title="Payment Report" dataProvider={customDataProvider}>
+        <Admin layout = {CustomLayout} title="Payment Report" dataProvider={customDataProvider}>
             <Resource
                 name={"castro"}
                 options={{label: 'Castro dei Volsci', id: 'castro'}}
@@ -91,9 +92,9 @@ function App() {
                 name={"summaries"}
                 options={{label: 'Aggregati', id: 'summaries'}}
                 list={TransactionList}
-                edit={TransactionEdit}
-                show={TransactionShow}
-                create={TransactionCreate}
+                //edit={TransactionEdit}
+                //show={TransactionShow}
+                //create={TransactionCreate}
             />
             <Resource
                 name={"report"}

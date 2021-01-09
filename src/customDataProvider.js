@@ -2,6 +2,7 @@ import firebaseDataProvider from "ra-data-firebase-client";
 import db from "./firebase/firebase-db";
 import * as firebase from './firebase/firebase'
 import {FirebaseAuthProvider} from 'react-admin-firebase';
+import storage from './firebase/firebase-storage';
 
 const dataProvider = firebaseDataProvider(firebase, {})
 export const authProvider = FirebaseAuthProvider(firebase, {})
@@ -10,24 +11,43 @@ export const customDataProvider = {
 
     ...dataProvider,
 
-    create: (resource, params) => {
+    create: async (resource, params) => {
         if (resource === 'summaries' || resource === 'report') {
             // fallback to the default implementation
             return dataProvider.create(resource, params);
         }
         console.log('params: ', params)
+        let receiptUrl = await updateReceipt(params.data.receipt, resource, params.data.date)
         updateSummary(params)
-        return dataProvider.create(resource, params);
+        return dataProvider.create(resource, {
+            ...params,
+            data: {
+                ...params.data,
+                receipt: {url: receiptUrl},
+            },
+        })
     },
 
-    update: (resource, params) => {
+    update: async (resource, params) => {
         if (resource === 'summaries' || resource === 'report') {
             // fallback to the default implementation
             return dataProvider.update(resource, params);
         }
         console.log('params: ', params)
+        let receiptImage = params.data.receipt
         updateSummary(params)
-        return dataProvider.update(resource, params);    
+        if(receiptImage){
+            let receiptUrl = await updateReceipt(params.data.receipt, resource, params.data.date)
+            return dataProvider.update(resource, {
+                ...params,
+                data: {
+                    ...params.data,
+                    receipt: {url: receiptUrl},
+                },
+            })
+        } else {
+            return dataProvider.update(resource, params);    
+        }
     }
 }
 
@@ -40,6 +60,7 @@ function updateSummary(params){
         console.log('childToUpdate',childToUpdate)
         if(childToUpdate == null){
             summaryRef.set({
+                id : params.data.date,
                 date: params.data.date,
                 amex: params.data.amex==null?  0 : convertToInt(params.data.amex),
                 visa: params.data.visa==null?  0 : convertToInt(params.data.visa),
@@ -60,5 +81,12 @@ function updateSummary(params){
 }
 
 function convertToInt(number){
-    return number==null? 0 : parseInt(number)
+    return number==null? 0 : parseFloat(number)
+}
+
+async function updateReceipt(image, resource, objId) {
+    const previewImage = image.rawFile
+    let storageRef = storage.ref('receipts/' +resource + '/' + objId)
+    await storageRef.put(previewImage).then(a => console.log("preview element updated", a));
+    return storageRef.getDownloadURL();
 }

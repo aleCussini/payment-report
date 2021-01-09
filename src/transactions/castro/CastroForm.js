@@ -1,4 +1,4 @@
-import {DateInput, ImageInput, NumberInput, SimpleForm} from "react-admin";
+import {DateInput, ImageInput, NumberInput, SimpleForm, ImageField} from "react-admin";
 import { Typography, Box } from '@material-ui/core';import React from "react";
 export const CastroForm = props => {
     return (
@@ -8,7 +8,6 @@ export const CastroForm = props => {
                 <Box p="1em" fullWidth>
                     <Box display="flex">
                         <Box flex={1} mr="1em">
-
                             <Typography variant="h6" gutterBottom>Importi</Typography>
                             <DateInput source={"date"} fullWidth/>
                             <Box display="flex">
@@ -67,7 +66,10 @@ export const CastroForm = props => {
                         </Box>
                         <Box flex={1} ml="1em">
                             <Typography variant="h6" gutterBottom>Scontrino</Typography>
-                            <ImageInput source={"receipt"}/>
+                            <ImageInput source="receipt" label="Scontrino" accept="image/*"
+                                placeholder={<p>Carica una foto</p>}>
+                                <ImageField source={"url"}/>
+                            </ImageInput>
                         </Box>
                     </Box>
                 </Box>

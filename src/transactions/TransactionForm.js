@@ -3,7 +3,7 @@ import {PatricaForm} from "./patrica/PatricaForm";
 import React from "react";
 import {SonninoForm} from "./sonnino/SonninoForm";
 import {ProssediForm} from "./prossedi/ProssediForm";
-import {ReportForm} from "./report/ReportForm";
+import {ReportPOSForm} from "./report/ReportPOSForm";
 import db from "../firebase/firebase-db";
 
 export const TransactionForm = props => {
@@ -96,9 +96,9 @@ export const TransactionForm = props => {
             return (
                 <ProssediForm {...props} />
             )
-        case "report" :
+        case "reportPOS" :
         return (
-            <ReportForm {...props} />
+            <ReportPOSForm {...props} />
         )
         default:
             return null

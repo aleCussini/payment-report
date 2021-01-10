@@ -7,9 +7,11 @@ import {TransactionForm} from "./transactions/TransactionForm";
 import {TransactionList} from "./transactions/TransactionList";
 import {TransactionShow} from "./transactions/TransactionShow";
 import Icon from "@material-ui/core/Icon";
+import {SummariesPOSList} from './transactions/summaries/SummariesPOSList'
 import {customDataProvider} from "./customDataProvider";
 import {authProvider} from "./customDataProvider"
 import CustomLayout from './CustomLayout'
+import Divider from '@material-ui/core/Divider';
 
 function EniIcon(props) {
     return (
@@ -88,17 +90,18 @@ function App() {
                 show={TransactionEdit}
                 create={TransactionCreate}
             />
+            <Divider/>
             <Resource
-                name={"summaries"}
-                options={{label: 'Aggregati', id: 'summaries'}}
-                list={TransactionList}
+                name={"summariesPOS"}
+                options={{label: 'Aggregati POS', id: 'summariesPOS'}}
+                list={SummariesPOSList}
                 //edit={TransactionEdit}
                 //show={TransactionShow}
                 //create={TransactionCreate}
             />
             <Resource
-                name={"report"}
-                options={{label: 'Report', id: 'report'}}
+                name={"reportPOS"}
+                options={{label: 'Report POS', id: 'reportPOS'}}
                 list={TransactionList}
                 edit={TransactionEdit}
                 show={TransactionShow}

@@ -37,33 +37,33 @@ const CustomAppBar = props => {
             />
             <span className={classes.spacer} />
             <CSVReader 
-                    onFileLoaded={(data, fileInfo) => readReport(data) /*console.dir(data, fileInfo)*/}/>
+                    onFileLoaded={(data, fileInfo) => readReportPOS(data) /*console.dir(data, fileInfo)*/}/>
         </AppBar>
     );
 };
 
-function readReport(data){
+function readReportPOS(data){
     data.map((record, index) => {
         let description = record[2]
         let amount = record[3]
         if(description.includes(AMEX)){
             let commonDate = getCommonDate(description)
-            let ref = db.ref('/report/').child(commonDate)
+            let ref = db.ref('/reportPOS/').child(commonDate)
             ref.update({ amex:amount, date: commonDate , id:  commonDate})
         }
         else if(description.includes(EDCM)){       
             let commonDate = getCommonDate(description)
-            let ref = db.ref('/report/').child(commonDate)
+            let ref = db.ref('/reportPOS/').child(commonDate)
             ref.update ({ edcm: amount ,date: commonDate, id: commonDate})
         }
         else if(description.includes(VISACR)){         
             let commonDate = getCommonDate(description)     
-            let ref = db.ref('/report/').child(commonDate)
+            let ref = db.ref('/reportPOS/').child(commonDate)
             ref.update({ visa: amount,date: commonDate, id: commonDate})
         }
         else if(description.includes(MASTER)){         
             let commonDate = getCommonDate(description)     
-            let ref = db.ref('/report/').child(commonDate)
+            let ref = db.ref('/reportPOS/').child(commonDate)
             ref.update({ masterCard: amount, date: commonDate, id: commonDate})
         }
         /*else if (description.includes(KUWAIT)){
@@ -71,14 +71,15 @@ function readReport(data){
         }*/
         else if (description.includes(PAGOBANCOMAT)){
             let pagobancomatDate = getPagobancomatDate(description)
-            let ref = db.ref('/report/').child(pagobancomatDate)
+            let ref = db.ref('/reportPOS/').child(pagobancomatDate)
             ref.update({ pagobancomat : amount, date: pagobancomatDate, id: pagobancomatDate})
         }
-        else if (description.includes(ENI)){
+        
+        /*else if (description.includes(ENI)){
             let eniDate = getEniDate(description)
             let ref = db.ref('/report/').child(eniDate)
             ref.update({eniBce : amount, date: eniDate, id: eniDate})
-        }
+        }*/
     })
 }
 
@@ -124,6 +125,5 @@ function getEniDate(descriptionToSub){
 function getElettrobluInfo(descriptionToSub){
     
 }
-
 
 export default CustomAppBar;

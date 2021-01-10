@@ -5,7 +5,7 @@ import db from "../../firebase/firebase-db"
 import { array } from "prop-types";
 
 
-export const ReportForm = props => {
+export const ReportPOSForm = props => {
     return (
         <SimpleForm {...props}>
             <DateInput source={"date"}/>
@@ -15,14 +15,6 @@ export const ReportForm = props => {
             <NumberInput source={"amex"}/>
             <NumberInput source={"diners"}/>
             <NumberInput source={"pagobancomat"}/>
-            <NumberInput source={"unisona"}/>
-            <NumberInput source={"selfBancomat"}/>
-            <NumberInput source={"eniMobilePayments"}/>
-            <NumberInput source={"eniBce"}/>
-            <NumberInput source={"multicardRoutex"}/>
-            <NumberInput source={"cartaDiCreditoGenerica"}/>
-            <NumberInput source={"elettroBlu"}/>
-            <NumberInput source={"dkv"}/>
         </SimpleForm>
     )
 

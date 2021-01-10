@@ -11,17 +11,7 @@ export const TransactionList = props => {
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
                 <NumberField source={"amex"}/>
-                <NumberField source={"diners"}/>
                 <NumberField source={"pagobancomat"}/>
-                <NumberField source={"unisona"}/>
-                <NumberField source={"selfBancomat"}/>
-                <NumberField source={"eniMobilePayments"}/>
-                <NumberField source={"eniBce"}/>
-                <NumberField source={"multicardRoutex"}/>
-                <NumberField source={"cartaDiCreditoGenerica"}/>
-                <NumberField source={"elettroBlu"}/>
-                <NumberField source={"dkv"}/>
-                <NumberField source={"selfBancomat"}/>
             </Datagrid>
         </List>
     )

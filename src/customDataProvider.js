@@ -38,7 +38,7 @@ export const customDataProvider = {
         }
         console.log('params: ', params)
         let receiptImage = params.data.receipt
-        //updateSummary(params) in update meglio creare una funzione di refresh, piuttosto che aggiornare direttamente il record
+        updateSummary(params)
         if(receiptImage){
             let receiptUrl = await updateReceipt(params.data.receipt, resource, params.data.date)
             return dataProvider.update(resource, {
@@ -65,25 +65,26 @@ function updateSummary(params){
             summaryRef.set({
                 id : params.data.date,
                 date: params.data.date,
-                amex: params.data.amex==null?  0 : convertToInt(params.data.amex),
-                visa: params.data.visa==null?  0 : convertToInt(params.data.visa),
-                maestro: params.data.maestro==null?  0 : convertToInt(params.data.maestro),
-                masterCard: params.data.masterCard==null?  0 : convertToInt(params.data.masterCard),
-                pagobancomat: params.data.pagobancomat==null?  0 : convertToInt(params.data.pagobancomat)
+                amex: params.data.amex==null?  0 : convertToNumber(params.data.amex),
+                visa: params.data.visa==null?  0 : convertToNumber(params.data.visa),
+                maestro: params.data.maestro==null?  0 : convertToNumber(params.data.maestro),
+                masterCard: params.data.masterCard==null?  0 : convertToNumber(params.data.masterCard),
+                pagobancomat: params.data.pagobancomat==null?  0 : convertToNumber(params.data.pagobancomat)
             })
         } else {
+            // altrimenti incremento il record summary con la somma algebrica tra il valore esistente e quello aggiornato
             summaryRef.update({
-                amex: childToUpdate.amex == null ? convertToInt(params.data.amex) : (convertToInt(childToUpdate.amex) + convertToInt(params.data.amex)),
-                visa: childToUpdate.visa == null ? convertToInt(params.data.visa) : (convertToInt(childToUpdate.visa) + convertToInt(params.data.visa)),
-                maestro: childToUpdate.maestro == null ?  convertToInt(params.data.maestro) : (convertToInt(childToUpdate.maestro) + convertToInt(params.data.maestro)),
-                masterCard: childToUpdate.masterCard == null ? convertToInt(params.data.masterCard) :  (convertToInt(childToUpdate.masterCard) + convertToInt(params.data.masterCard)),
-                pagobancomat: childToUpdate.pagobancomat == null ? convertToInt(params.data.pagobancomat) : (convertToInt(childToUpdate.pagobancomat) + convertToInt(params.data.pagobancomat))
+                amex : (params.previousData) ? convertToNumber(childToUpdate.amex) + (convertToNumber(params.data.amex) - convertToNumber(params.previousData.amex)) : convertToNumber(childToUpdate.amex) + convertToNumber(params.data.amex),
+                visa :  (params.previousData) ? convertToNumber(childToUpdate.visa) + (convertToNumber(params.data.visa) - convertToNumber(params.previousData.visa)) : convertToNumber(childToUpdate.visa) + convertToNumber(params.data.visa),
+                maestro :  (params.previousData) ? convertToNumber(childToUpdate.maestro) + (convertToNumber(params.data.maestro) - convertToNumber(params.previousData.maestro)) :  convertToNumber(childToUpdate.maestro) + convertToNumber(params.data.maestro),
+                masterCard :  (params.previousData) ? convertToNumber(childToUpdate.masterCard) + (convertToNumber(params.data.masterCard) - convertToNumber(params.previousData.masterCard)) : convertToNumber(childToUpdate.masterCard) + convertToNumber(params.data.masterCard),
+                pagobancomat :  (params.previousData) ? convertToNumber(childToUpdate.pagobancomat) + (convertToNumber(params.data.pagobancomat) - convertToNumber(params.previousData.pagobancomat)) : convertToNumber(childToUpdate.pagobancomat) + convertToNumber(params.data.pagobancomat)
             })
         }
     })
 }
 
-function convertToInt(number){
+function convertToNumber(number){
     return number==null? 0 : parseFloat(number)
 }
 

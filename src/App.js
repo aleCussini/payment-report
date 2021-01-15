@@ -82,6 +82,15 @@ function App() {
                 create={TransactionCreate}
             />
             <Resource
+                name= {"terracina"}
+                icon={EniIcon}
+                options={{label: 'Terracina', id: 'terracina'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionShow}
+                create={TransactionCreate}
+            />
+            <Resource
                 name={"prossedi"}
                 options={{label: 'Prossedi', id: 'prossedi'}}
                 icon={Q8Icon}

@@ -39,7 +39,7 @@ export const customDataProvider = {
         console.log('params: ', params)
         let receiptImage = params.data.receipt
         updateSummary(params)
-        if(receiptImage){
+        if(receiptImage.rawFile){
             let receiptUrl = await updateReceipt(params.data.receipt, resource, params.data.date)
             return dataProvider.update(resource, {
                 ...params,

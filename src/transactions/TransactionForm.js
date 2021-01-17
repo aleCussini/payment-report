@@ -2,6 +2,7 @@ import {CastroForm} from "./castro/CastroForm";
 import {PatricaForm} from "./patrica/PatricaForm";
 import React from "react";
 import {SonninoForm} from "./sonnino/SonninoForm";
+import {TerracinaForm} from "./terracina/TerracinaForm";
 import {ProssediForm} from "./prossedi/ProssediForm";
 import {ReportPOSForm} from "./report/ReportPOSForm";
 import db from "../firebase/firebase-db";
@@ -96,6 +97,10 @@ export const TransactionForm = props => {
             return (
                 <ProssediForm {...props} />
             )
+        case "terracina" :
+             return (
+             <TerracinaForm {...props} />
+                )
         case "reportPOS" :
         return (
             <ReportPOSForm {...props} />

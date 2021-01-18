@@ -25,3 +25,6 @@ yarn-error.log*
 /.idea/
 /src/firebase/firebase.js
 public/Accredito Carte.xlsx
+database.rules.json
+firebase.json
+.firebase/hosting.YnVpbGQ.cache

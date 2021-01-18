@@ -15,6 +15,7 @@
     "react-admin": "^3.6.2",
     "react-admin-firebase": "^3.2.1",
     "react-csv-reader": "^3.1.2",
+    "react-device-detect": "^1.15.0",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.3",
     "sort-by": "^1.2.0"

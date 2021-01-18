@@ -53,7 +53,7 @@ const TransactionCreate = props => {
 
 function App() {
     return (
-        <Admin layout = {CustomLayout} title="Payment Report" dataProvider={customDataProvider}>
+        <Admin layout = {CustomLayout} title="Payment Report" dataProvider={customDataProvider} authProvider={authProvider}>
             <Resource
                 name={"castro"}
                 options={{label: 'Castro dei Volsci', id: 'castro'}}

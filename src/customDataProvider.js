@@ -4,6 +4,7 @@ import * as firebase from './firebase/firebase'
 import {FirebaseAuthProvider} from 'react-admin-firebase';
 import storage from './firebase/firebase-storage';
 
+
 const dataProvider = firebaseDataProvider(firebase, {})
 export const authProvider = FirebaseAuthProvider(firebase, {})
 
@@ -39,7 +40,7 @@ export const customDataProvider = {
         console.log('params: ', params)
         let receiptImage = params.data.receipt
         updateSummary(params)
-        if(receiptImage){
+        if(receiptImage.rawFile){
             let receiptUrl = await updateReceipt(params.data.receipt, resource, params.data.date)
             return dataProvider.update(resource, {
                 ...params,

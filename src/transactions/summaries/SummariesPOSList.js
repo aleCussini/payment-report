@@ -11,11 +11,11 @@ export const SummariesPOSList = props => {
         <List {...props} title={"Lista Aggregati"}>
             <Datagrid rowClick={"show"}>
                 <DateField source={"date"}/>
-                <ColoredNumberField source={"masterCard"}/>
-                <ColoredNumberField source={"maestro"}/>
-                <ColoredNumberField source={"visa"}/>
-                <ColoredNumberField source={"amex"}/>
-                <ColoredNumberField source={"pagobancomat"}/>
+                <NumberField source={"masterCard"}/>
+                <NumberField source={"maestro"}/>
+                <NumberField source={"visa"}/>
+                <NumberField source={"amex"}/>
+                <NumberField source={"pagobancomat"}/>
             </Datagrid>
         </List>
     )
@@ -29,8 +29,8 @@ const useStyles = makeStyles({
 
 const ColoredNumberField = props => {
     const classes = useStyles();
-    let redClass = 'classes.big';
     let summaryValue = 0;
+    let done = false;
     let reportValue = 0;
     let summaryRef = db.ref('summariesPOS').child(props.record.date).child(props.source)
     let reportRef = db.ref('reportPOS').child(props.record.date).child(props.source)
@@ -40,17 +40,19 @@ const ColoredNumberField = props => {
             reportValue = reportSnap.val() == null ? 0 : reportSnap.val()
             console.log('summaryVal: ', summaryValue)
             console.log('reportVal:', reportValue)
-            redClass =  parseFloat(summaryValue) != parseFloat(reportValue) ? true : false;
-            console.log('redClass: ' , redClass)
+            done = true;
+
         })
     });
-    return (
-        <NumberField
-            className={classnames({
-                [classes.big]: summaryValue !== reportValue,
-                [classes.small]: summaryValue === reportValue,
-            })}
-            {...props}
-        />
-    );
+    while (done){
+        return (
+            <NumberField
+                className={classnames({
+                    [classes.big]: summaryValue !== reportValue,
+                    [classes.small]: summaryValue === reportValue,
+                })}
+                {...props}
+            />
+        );
+    }
 };

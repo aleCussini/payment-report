@@ -1,6 +1,12 @@
 import {DateInput, ImageInput, NumberInput, SimpleForm, ImageField} from "react-admin";
 import { Typography, Box } from '@material-ui/core';
 import React from "react";
+import {
+    BrowserView,
+    MobileView,
+    isBrowser,
+    isMobile
+  } from "react-device-detect";
 export const TerracinaForm = props => {
     if(isBrowser){
         return (

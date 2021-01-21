@@ -21,7 +21,7 @@ export const customDataProvider = {
         let receiptImage = params.data.receipt
         if (receiptImage){
             let receiptUrl = await updateReceipt(params.data.receipt, resource, params.data.date)
-            updateSummary(params)
+            updateSummary(params, params.data)
             return dataProvider.create(resource, {
                 ...params,
                 data: {
@@ -52,6 +52,16 @@ export const customDataProvider = {
         } else {
             return dataProvider.update(resource, params);    
         }
+    },
+
+    delete: async (resource, params) => {
+        if (resource === 'summariesPOS' || resource === 'reportPOS') {
+            // fallback to the default implementation
+            return dataProvider.delete(resource, params);
+        }
+        console.log('params',params);
+        updateSummaryDelete(params)
+        return dataProvider.delete(resource,params)
     }
 }
 
@@ -87,6 +97,25 @@ function updateSummary(params){
 
 function convertToNumber(number){
     return number==null? 0 : parseFloat(number)
+}
+
+function updateSummaryDelete(params){
+    let summaryRef = db.ref('summariesPOS/' + params.previousData.date)
+    console.log('summaryRef', summaryRef)
+    summaryRef.once('value', snapshot => {
+        console.log(snapshot)
+        let childToUpdate = snapshot.val()
+        console.log('childToUpdate',childToUpdate)
+        // altrimenti incremento il record summary con la somma algebrica tra il valore esistente e quello aggiornato
+        summaryRef.update({
+            amex : convertToNumber(childToUpdate.amex) - convertToNumber(params.previousData.amex),
+            visa :  convertToNumber(childToUpdate.visa) - convertToNumber(params.previousData.visa),
+            maestro :  convertToNumber(childToUpdate.maestro) - convertToNumber(params.previousData.maestro),
+            masterCard :  convertToNumber(childToUpdate.masterCard) - convertToNumber(params.previousData.masterCard),
+            pagobancomat :  convertToNumber(childToUpdate.pagobancomat) + convertToNumber(params.previousData.pagobancomat)
+        })
+
+    })
 }
 
 async function updateReceipt(image, resource, objId) {

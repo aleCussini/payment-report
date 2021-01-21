@@ -7,11 +7,11 @@ import PublishIcon from '@material-ui/icons/Publish';
 import CSVReader from 'react-csv-reader'
 import db from "./firebase/firebase-db"
 
-const   AMEX = 'AMEX', EDCM = 'EDC', 
+const   AMEX = 'AMEX', MAESTRO = 'EDC', 
         VISACR = 'VISACR', MASTER = 'MASTER', 
         KUWAIT = 'KUWAIT', PAGOBANCOMAT = 'INCASSO POS DEL',
         ENI = 'ENI SPA', ELETTROBLU = 'elettroblu'
-const paymentType1 = {AMEX, EDCM, VISACR, MASTER}
+const paymentType1 = {AMEX, MAESTRO, VISACR, MASTER}
 
 const useStyles = makeStyles({
     title: {
@@ -51,10 +51,10 @@ function readReportPOS(data){
             let ref = db.ref('/reportPOS/').child(commonDate)
             ref.update({ amex:amount, date: commonDate , id:  commonDate})
         }
-        else if(description.includes(EDCM)){       
+        else if(description.includes(MAESTRO)){       
             let commonDate = getCommonDate(description)
             let ref = db.ref('/reportPOS/').child(commonDate)
-            ref.update ({ edcm: amount ,date: commonDate, id: commonDate})
+            ref.update ({ maestro: amount ,date: commonDate, id: commonDate})
         }
         else if(description.includes(VISACR)){         
             let commonDate = getCommonDate(description)     

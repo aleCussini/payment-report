@@ -112,7 +112,7 @@ function updateSummaryDelete(params){
             visa :  convertToNumber(childToUpdate.visa) - convertToNumber(params.previousData.visa),
             maestro :  convertToNumber(childToUpdate.maestro) - convertToNumber(params.previousData.maestro),
             masterCard :  convertToNumber(childToUpdate.masterCard) - convertToNumber(params.previousData.masterCard),
-            pagobancomat :  convertToNumber(childToUpdate.pagobancomat) + convertToNumber(params.previousData.pagobancomat)
+            pagobancomat :  convertToNumber(childToUpdate.pagobancomat) - convertToNumber(params.previousData.pagobancomat)
         })
 
     })

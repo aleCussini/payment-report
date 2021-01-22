@@ -10,8 +10,16 @@ import Icon from "@material-ui/core/Icon";
 import {SummariesPOSList} from './transactions/summaries/SummariesPOSList'
 import {customDataProvider} from "./customDataProvider";
 import {authProvider} from "./customDataProvider"
-import CustomLayout from './CustomLayout'
+import BrowserLayout from './BrowserLayout'
 import Divider from '@material-ui/core/Divider';
+import MobileLayout from './MobileLayout';
+
+import {
+    BrowserView,
+    MobileView,
+    isBrowser,
+    isMobile
+  } from "react-device-detect";
 
 function EniIcon(props) {
     return (
@@ -53,7 +61,7 @@ const TransactionCreate = props => {
 
 function App() {
     return (
-        <Admin layout = {CustomLayout} title="Payment Report" dataProvider={customDataProvider} authProvider={authProvider}>
+        <Admin layout = {{isMobile} ? MobileLayout : {BrowserLayout}}  title="Payment Report" dataProvider={customDataProvider} authProvider={authProvider}>
             <Resource
                 name={"castro"}
                 options={{label: 'Castro dei Volsci', id: 'castro'}}
@@ -99,7 +107,8 @@ function App() {
                 show={TransactionEdit}
                 create={TransactionCreate}
             />
-            <Divider/>
+             <Divider variant="inset"/>
+            
             <Resource
                 name={"summariesPOS"}
                 options={{label: 'Aggregati POS', id: 'summariesPOS'}}
@@ -115,7 +124,8 @@ function App() {
                 edit={TransactionEdit}
                 show={TransactionShow}
                 create={TransactionCreate}
-            />
+            /> 
+            
         </Admin>
     );
 }

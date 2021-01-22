@@ -124,3 +124,8 @@ async function updateReceipt(image, resource, objId) {
     await storageRef.put(previewImage).then(a => console.log("preview element updated", a));
     return storageRef.getDownloadURL();
 }
+
+
+function putSummary(){
+    
+}

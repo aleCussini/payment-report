@@ -61,7 +61,7 @@ const TransactionCreate = props => {
 
 function App() {
     return (
-        <Admin layout = {{isMobile} ? MobileLayout : {BrowserLayout}}  title="Payment Report" dataProvider={customDataProvider} authProvider={authProvider}>
+        <Admin layout = {isMobile ? MobileLayout : BrowserLayout}  title="Payment Report" dataProvider={customDataProvider} authProvider={authProvider}>
             <Resource
                 name={"castro"}
                 options={{label: 'Castro dei Volsci', id: 'castro'}}

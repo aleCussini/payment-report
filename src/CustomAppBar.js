@@ -1,16 +1,14 @@
 import * as React from 'react';
-import { AppBar } from 'react-admin';
+import {AppBar} from 'react-admin';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton'
-import { makeStyles } from '@material-ui/core/styles';
-import PublishIcon from '@material-ui/icons/Publish';
+import {makeStyles} from '@material-ui/core/styles';
 import CSVReader from 'react-csv-reader'
 import db from "./firebase/firebase-db"
 
-const   AMEX = 'AMEX', MAESTRO = 'EDC', 
-        VISACR = 'VISACR', MASTER = 'MASTER', 
-        KUWAIT = 'KUWAIT', PAGOBANCOMAT = 'INCASSO POS DEL',
-        ENI = 'ENI SPA', ELETTROBLU = 'elettroblu'
+const AMEX = 'AMEX', MAESTRO = 'EDC',
+    VISACR = 'VISACR', MASTER = 'MASTER',
+    KUWAIT = 'KUWAIT', PAGOBANCOMAT = 'INCASSO POS DEL',
+    ENI = 'ENI SPA', ELETTROBLU = 'elettroblu'
 const paymentType1 = {AMEX, MAESTRO, VISACR, MASTER}
 
 const useStyles = makeStyles({
@@ -35,96 +33,95 @@ const CustomAppBar = props => {
                 className={classes.title}
                 id="react-admin-title"
             />
-            <span className={classes.spacer} />
-            <CSVReader 
-                    onFileLoaded={(data, fileInfo) => readReportPOS(data) /*console.dir(data, fileInfo)*/}/>
+            <span className={classes.spacer}/>
+            <CSVReader
+                onFileLoaded={(data, fileInfo) => readReportPOS(data) /*console.dir(data, fileInfo)*/}/>
         </AppBar>
     );
 };
 
-function readReportPOS(data){
+function readReportPOS(data) {
     let reportObj = new Map()
     data.map((record, index) => {
         let description = record[2]
         let amount = record[3]
         let descObject = readDescription(description);
-        if(descObject){
-            const key = descObject.date+'.'+descObject.paymentType
-            if (reportObj.has(key)){
+
+        if (descObject) {
+            let paymentType = descObject.paymentType;
+            let date = descObject.date;
+            const key = date + '.' + paymentType
+
+            if (reportObj.has(key)) {
                 let existingObject = reportObj.get(key)
-                let sum = existingObject.amount + amount;
-                existingObject
-
+                let sum = existingObject[paymentType] + amount;
+                existingObject = {...existingObject, [paymentType]: sum}
+                reportObj.delete(key)
+                reportObj.set(key, existingObject)
             } else {
-
-            }
-            
-            let transaction = {
-                [descObject.date] : {
-                    [descObject.paymentType] : amount,
-                    date: descObject.date,
-                    id: descObject.date
+                let obj = {
+                    [date]: {
+                        [paymentType]: amount,
+                        date: date,
+                        id: date
+                    }
                 }
+                reportObj.set(key, obj)
             }
-
-
-
-            reportObj.set(transaction);
-            reportObj.h
         }
-        
+
     })
 
     let reportRef = db.ref('/reportPOS')
     reportRef.update(reportObj);
-    
+
     alert('Inserimento Completato')
 }
 
-function getCommonDate(descriptionToSub){
+function getCommonDate(descriptionToSub) {
     // es INCASSO POS 29/08/19 AMEX    CONV. 3898566 / 00001
-    let info = descriptionToSub.substring(12,29).trim();
+    let info = descriptionToSub.substring(12, 29).trim();
     let infoArray = info.split(' ');
     let dateToFormat = infoArray[0];
-    let paymentType = infoArray[1].replaceAll('.','');
+    let paymentType = infoArray[1].replaceAll('.', '');
     let arrayDate = dateToFormat.split('/')
     let date = '20' + arrayDate[2] + '-' + arrayDate[1] + '-' + arrayDate[0]
     return date;
 }
 
-function getPagobancomatDate(descriptionToSub){
-    let dateToFormat = descriptionToSub.substring(16,24)
+function getPagobancomatDate(descriptionToSub) {
+    let dateToFormat = descriptionToSub.substring(16, 24)
     let arrayDate = dateToFormat.split('/')
     let month = arrayDate[1]
-    let date = '20' + arrayDate[2]+'-' + month + '-' + arrayDate[0]
+    let date = '20' + arrayDate[2] + '-' + month + '-' + arrayDate[0]
     return date;
 }
 
-function convertToNumber(number){
-    return number==null? 0 : parseFloat(number)
+function convertToNumber(number) {
+    return number == null ? 0 : parseFloat(number)
 }
 
 
-function readDescription(description){
+function readDescription(description) {
 
-    if(description.includes('INCASSO POS') ){
+    if (description.includes('INCASSO POS')) {
 
         let date;
         let paymentType;
 
-        if(description.includes(AMEX)){
+        if (description.includes(AMEX)) {
             date = getCommonDate(description);
             paymentType = 'amex';
-        }else if (description.includes(MAESTRO)){
+        } else if (description.includes(MAESTRO)) {
             date = getCommonDate(description)
             paymentType = 'maestro'
-        }else if (description.includes(VISACR)){
+        } else if (description.includes(VISACR)) {
             date = getCommonDate(description)
             paymentType = 'visa'
-        }else if (description.includes(MASTER)){
+        } else if (description.includes(MASTER)) {
             date = getCommonDate(description)
             paymentType = 'masterCard'
-        }else if (description.includes(PAGOBANCOMAT)){
+        } else if (description.includes(PAGOBANCOMAT)) {
             date = getPagobancomatDate(description)
             paymentType = 'pagobancomat'
         }

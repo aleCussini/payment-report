@@ -49,6 +49,16 @@ function readReportPOS(data){
         let amount = record[3]
         let descObject = readDescription(description);
         if(descObject){
+            const key = descObject.date+'.'+descObject.paymentType
+            if (reportObj.has(key)){
+                let existingObject = reportObj.get(key)
+                let sum = existingObject.amount + amount;
+                existingObject
+
+            } else {
+
+            }
+            
             let transaction = {
                 [descObject.date] : {
                     [descObject.paymentType] : amount,
@@ -56,7 +66,10 @@ function readReportPOS(data){
                     id: descObject.date
                 }
             }
-            reportObj.add(transaction);
+
+
+
+            reportObj.set(transaction);
             reportObj.h
         }
         

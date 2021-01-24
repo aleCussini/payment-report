@@ -54,14 +54,14 @@ function readReportPOS(data) {
 
             if (reportObj.has(key)) {
                 let existingObject = reportObj.get(key)
-                let sum = existingObject[paymentType] + amount;
+                let sum = (existingObject[date][paymentType]) + convertToNumber(amount.replaceAll('.',''));
                 existingObject = {...existingObject, [paymentType]: sum}
                 reportObj.delete(key)
                 reportObj.set(key, existingObject)
             } else {
                 let obj = {
                     [date]: {
-                        [paymentType]: amount,
+                        [paymentType]: convertToNumber(amount.replaceAll('.','')),
                         date: date,
                         id: date
                     }
@@ -72,8 +72,11 @@ function readReportPOS(data) {
 
     })
 
+    console.log(reportObj)
+    console.log(JSON.stringify(...reportObj))
+
     let reportRef = db.ref('/reportPOS')
-    reportRef.update(reportObj);
+    //reportRef.update(reportObj);
 
     alert('Inserimento Completato')
 }
@@ -98,6 +101,7 @@ function getPagobancomatDate(descriptionToSub) {
 }
 
 function convertToNumber(number) {
+
     return number == null ? 0 : parseFloat(number)
 }
 

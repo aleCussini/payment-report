@@ -43,44 +43,29 @@ const CustomAppBar = props => {
 };
 
 function readReportPOS(data){
+    let reportObj = new Map()
     data.map((record, index) => {
         let description = record[2]
         let amount = record[3]
-        if(description.includes(AMEX)){
-            let commonDate = getCommonDate(description)
-            let ref = db.ref('/reportPOS/').child(commonDate)
-            ref.update({ amex:amount, date: commonDate , id:  commonDate})
-        }
-        else if(description.includes(MAESTRO)){       
-            let commonDate = getCommonDate(description)
-            let ref = db.ref('/reportPOS/').child(commonDate)
-            ref.update ({ maestro: amount ,date: commonDate, id: commonDate})
-        }
-        else if(description.includes(VISACR)){         
-            let commonDate = getCommonDate(description)     
-            let ref = db.ref('/reportPOS/').child(commonDate)
-            ref.update({ visa: amount,date: commonDate, id: commonDate})
-        }
-        else if(description.includes(MASTER)){         
-            let commonDate = getCommonDate(description)     
-            let ref = db.ref('/reportPOS/').child(commonDate)
-            ref.update({ masterCard: amount, date: commonDate, id: commonDate})
-        }
-        /*else if (description.includes(KUWAIT)){
-            obj = getKuwaitInfo(description)
-        }*/
-        else if (description.includes(PAGOBANCOMAT)){
-            let pagobancomatDate = getPagobancomatDate(description)
-            let ref = db.ref('/reportPOS/').child(pagobancomatDate)
-            ref.update({ pagobancomat : amount, date: pagobancomatDate, id: pagobancomatDate})
+        let descObject = readDescription(description);
+        if(descObject){
+            let transaction = {
+                [descObject.date] : {
+                    [descObject.paymentType] : amount,
+                    date: descObject.date,
+                    id: descObject.date
+                }
+            }
+            reportObj.add(transaction);
+            reportObj.h
         }
         
-        /*else if (description.includes(ENI)){
-            let eniDate = getEniDate(description)
-            let ref = db.ref('/report/').child(eniDate)
-            ref.update({eniBce : amount, date: eniDate, id: eniDate})
-        }*/
     })
+
+    let reportRef = db.ref('/reportPOS')
+    reportRef.update(reportObj);
+    
+    alert('Inserimento Completato')
 }
 
 function getCommonDate(descriptionToSub){
@@ -94,18 +79,6 @@ function getCommonDate(descriptionToSub){
     return date;
 }
 
-function getKuwaitInfo(descriptionToSub){
-    let dateToFormat = descriptionToSub.substring(descriptionToSub.length-7)
-    let arrayDate = dateToFormat.split('.')
-    let month = arrayDate[1] <10 ? '0' + arrayDate[1] :  arrayDate[1]
-    let date = '20' + arrayDate[2]+'-' + month + '-' + arrayDate[0]
-    let obj = {
-        date : date,
-        paymentType : KUWAIT
-    }
-    return obj;
-}
-
 function getPagobancomatDate(descriptionToSub){
     let dateToFormat = descriptionToSub.substring(16,24)
     let arrayDate = dateToFormat.split('/')
@@ -114,16 +87,40 @@ function getPagobancomatDate(descriptionToSub){
     return date;
 }
 
-function getEniDate(descriptionToSub){
-    let dateToFormat = descriptionToSub.substring(110,118)
-    let day = dateToFormat.substring(0,2)
-    let month = dateToFormat.substring(2,4)
-    let year = dateToFormat.substring(4,8)
-    let date = year + '-' + month + '-' + day
-    return date;
+function convertToNumber(number){
+    return number==null? 0 : parseFloat(number)
 }
-function getElettrobluInfo(descriptionToSub){
-    
+
+
+function readDescription(description){
+
+    if(description.includes('INCASSO POS') ){
+
+        let date;
+        let paymentType;
+
+        if(description.includes(AMEX)){
+            date = getCommonDate(description);
+            paymentType = 'amex';
+        }else if (description.includes(MAESTRO)){
+            date = getCommonDate(description)
+            paymentType = 'maestro'
+        }else if (description.includes(VISACR)){
+            date = getCommonDate(description)
+            paymentType = 'visa'
+        }else if (description.includes(MASTER)){
+            date = getCommonDate(description)
+            paymentType = 'masterCard'
+        }else if (description.includes(PAGOBANCOMAT)){
+            date = getPagobancomatDate(description)
+            paymentType = 'pagobancomat'
+        }
+
+        return {
+            date: date,
+            paymentType: paymentType
+        }
+    }
 }
 
 export default CustomAppBar;

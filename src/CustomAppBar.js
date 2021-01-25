@@ -55,7 +55,7 @@ function readReportPOS(data) {
             if (reportObj.has(key)) {
                 let existingObject = reportObj.get(key)
                 let sum = (existingObject[date][paymentType]) + convertToNumber(amount.replaceAll('.',''));
-                existingObject = {...existingObject, [paymentType]: sum}
+                existingObject = {[date]:{...existingObject[date], [paymentType]: sum}}
                 reportObj.delete(key)
                 reportObj.set(key, existingObject)
             } else {
@@ -72,11 +72,11 @@ function readReportPOS(data) {
 
     })
 
-    console.log(reportObj)
-    console.log(JSON.stringify(...reportObj))
-
-    let reportRef = db.ref('/reportPOS')
-    //reportRef.update(reportObj);
+    reportObj.forEach((value,key) => {
+        let keyFB = key.split('.')[0]
+        let ref = db.ref('/reportPOS-test/')
+        ref.set(value)
+    })
 
     alert('Inserimento Completato')
 }

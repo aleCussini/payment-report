@@ -7,9 +7,7 @@ import db from "./firebase/firebase-db"
 
 const AMEX = 'AMEX', MAESTRO = 'EDC',
     VISACR = 'VISACR', MASTER = 'MASTER',
-    KUWAIT = 'KUWAIT', PAGOBANCOMAT = 'INCASSO POS DEL',
-    ENI = 'ENI SPA', ELETTROBLU = 'elettroblu'
-const paymentType1 = {AMEX, MAESTRO, VISACR, MASTER}
+    PAGOBANCOMAT = 'INCASSO POS DEL'
 
 const useStyles = makeStyles({
     title: {
@@ -73,12 +71,34 @@ function readReportPOS(data) {
     })
 
     reportObj.forEach((value,key) => {
+        
         let keyFB = key.split('.')[0]
-        let ref = db.ref('/reportPOS-test/')
-        ref.set(value)
+        let payment = key.split('.')[1]
+        let amount = value[keyFB][payment]
+        
+        let ref = db.ref('reportPOS').child(keyFB)
+        ref.once('value', snap => {
+            if(snap){
+                let prevSnap = snap.val()
+                ref.update({
+                    ...prevSnap,
+                    id: keyFB,
+                    date: keyFB,
+                    [payment] : amount
+                })
+            } else {
+                ref.set({
+                    id: keyFB,
+                    date: keyFB,
+                    [payment] : amount
+                })
+            }
+            
+        })
+        
     })
-
     alert('Inserimento Completato')
+
 }
 
 function getCommonDate(descriptionToSub) {

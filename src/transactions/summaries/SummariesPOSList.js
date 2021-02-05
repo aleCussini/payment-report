@@ -1,4 +1,4 @@
-import {Datagrid, DateField, List, NumberField} from "react-admin";
+import {Datagrid, DateField, List, NumberField, TextField} from "react-admin";
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -11,7 +11,7 @@ export const SummariesPOSList = props => {
         <List {...props} title={"Lista Aggregati"}>
             <Datagrid rowClick={"show"}>
                 <DateField source={"date"}/>
-                <NumberField source={"masterCard"}/>
+                <NumberField source={props.options.label}/>
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
                 <NumberField source={"amex"}/>
@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 const ColoredNumberField = props => {
     const classes = useStyles();
     let summaryValue = 0;
+    let difference = 0;
     let done = false;
     let reportValue = 0;
     let summaryRef = db.ref('summariesPOS').child(props.record.date).child(props.source)
@@ -38,21 +39,24 @@ const ColoredNumberField = props => {
         reportRef.ref.once('value', reportSnap => {
             summaryValue = summarySnap.val() == null ? 0 :  summarySnap.val()
             reportValue = reportSnap.val() == null ? 0 : reportSnap.val()
+            difference = reportValue - summaryValue;
             console.log('summaryVal: ', summaryValue)
             console.log('reportVal:', reportValue)
+            console.log('difference', difference);
+            props.source = summaryValue + '(' + difference + ')';
             done = true;
 
         })
     });
-    while (done){
-        return (
-            <NumberField
-                className={classnames({
-                    [classes.big]: summaryValue !== reportValue,
-                    [classes.small]: summaryValue === reportValue,
-                })}
-                {...props}
-            />
-        );
-    }
+
+    return (
+        <TextField
+            className={classnames({
+                [classes.big]: summaryValue !== reportValue,
+                [classes.small]: summaryValue === reportValue,
+            })}
+            {...props}
+        />
+    );
+    
 };

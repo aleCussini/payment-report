@@ -1,4 +1,4 @@
-import {Datagrid, DateField, List, NumberField, TextField} from "react-admin";
+import {Datagrid, DateField, List, NumberField, TextField, FunctionField} from "react-admin";
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -7,11 +7,13 @@ import { red } from "@material-ui/core/colors";
 
 export const SummariesPOSList = props => {
     const label = props.options.label;
+    console.log('######## load 1 #############')
     return (
         <List {...props} title={"Lista Aggregati"}>
             <Datagrid rowClick={"show"}>
                 <DateField source={"date"}/>
-                <NumberField source={props.options.label}/>
+                <NumberField source={"masterCard"}/>
+                <FunctionField label="+/-" render = {record => test_difference(record, 'masterCard')} />
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
                 <NumberField source={"amex"}/>
@@ -27,36 +29,35 @@ const useStyles = makeStyles({
     big: { color: 'red' },
 });
 
-const ColoredNumberField = props => {
-    const classes = useStyles();
+ async function difference(record, payment){
+    console.log('record', record)
+    console.log('payment', payment)
     let summaryValue = 0;
     let difference = 0;
-    let done = false;
     let reportValue = 0;
-    let summaryRef = db.ref('summariesPOS').child(props.record.date).child(props.source)
-    let reportRef = db.ref('reportPOS').child(props.record.date).child(props.source)
+    let summaryRef = db.ref('summariesPOS').child(record.date).child(payment)
+    let reportRef = db.ref('reportPOS').child(record.date).child(payment)
+    difference = await getDifference (summaryRef, reportRef); 
+    console.log('difference to return: ', difference)
+    return (
+        <p>{difference}</p>
+    );
+};
+
+function convertToNumber(number){
+    return number==null? 0 : parseFloat(number)
+}
+
+async function getDifference(summaryRef, reportRef){
     summaryRef.once('value', summarySnap => {
         reportRef.ref.once('value', reportSnap => {
-            summaryValue = summarySnap.val() == null ? 0 :  summarySnap.val()
-            reportValue = reportSnap.val() == null ? 0 : reportSnap.val()
-            difference = reportValue - summaryValue;
-            console.log('summaryVal: ', summaryValue)
-            console.log('reportVal:', reportValue)
-            console.log('difference', difference);
-            props.source = summaryValue + '(' + difference + ')';
-            done = true;
-
-        })
+            difference = convertToNumber(reportSnap.val()) - convertToNumber(summarySnap.val());
+        }) 
     });
+}
 
+function test_difference(){
     return (
-        <TextField
-            className={classnames({
-                [classes.big]: summaryValue !== reportValue,
-                [classes.small]: summaryValue === reportValue,
-            })}
-            {...props}
-        />
-    );
-    
-};
+        <p>gnagna</p>
+    )
+}

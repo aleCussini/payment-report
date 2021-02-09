@@ -8,23 +8,28 @@ import { red } from "@material-ui/core/colors";
 const useStyles = theme => ({
     masterCard: {
         backgroundColor: '#cbf7d7',
-        color: '#405245'
+        color: '#405245',
+        borderBottom : '1px solid black'
      },
      maestro: {
         backgroundColor: '#f5f3c6',
-        color: '#525142'
+        color: '#525142',
+        borderBottom : '1px solid black'
      },
      visa: {
         backgroundColor: '#f0bdbd',
-        color: '#5c4343'
+        color: '#5c4343',
+        borderBottom : '1px solid black'
      },
      amex: {
         backgroundColor: '#c5c7fa',
-        color: '#494a5c'
+        color: '#494a5c',
+        borderBottom : '1px solid black'
      },
      pagobancomat: {
         backgroundColor: '#d7f8fa',
-        color: '#3f494a'
+        color: '#3f494a',
+        borderBottom : '1px solid black'
      },
 });
 class SummariesPOSList extends React.Component { 
@@ -68,20 +73,24 @@ class SummariesPOSList extends React.Component {
 
 
 function convertToNumber(number){
-    return number==null? 0 : parseFloat(number).toFixed(2)
+    return number ?  parseFloat(number).toFixed(2) : 0
 }
 
 
 function getFromState(record ,reportObj, payment){
+    if(reportObj){
     let difference = 0;
     let summaryVal = convertToNumber(record[payment]);
-    let reportVal =  reportObj[record.date] ? convertToNumber(reportObj[record.date][payment])   : 0
+    let reportVal =  reportObj[record.date] ? convertToNumber(reportObj[record.date][payment])  : 0
     console.log('source', summaryVal)
     console.log('value from report',reportVal);
     difference = reportVal - summaryVal
     console.log('difference', difference)
-    return (
-        <p >{convertToNumber(difference)}</p>
+        return (
+            <p >{convertToNumber(difference)}</p>
+        )
+    } else return (
+        <p >errore nella lettura del report</p>
     )
 }
 

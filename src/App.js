@@ -7,7 +7,7 @@ import {TransactionForm} from "./transactions/TransactionForm";
 import {TransactionList} from "./transactions/TransactionList";
 import {TransactionShow} from "./transactions/TransactionShow";
 import Icon from "@material-ui/core/Icon";
-import {SummariesPOSList} from './transactions/summaries/SummariesPOSList'
+import SummariesPOSList from './transactions/summaries/SummariesPOSList'
 import {customDataProvider} from "./customDataProvider";
 import {authProvider} from "./customDataProvider"
 import BrowserLayout from './BrowserLayout'

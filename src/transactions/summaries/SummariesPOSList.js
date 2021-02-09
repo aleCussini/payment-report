@@ -5,61 +5,61 @@ import classnames from 'classnames';
 import db from '../../firebase/firebase-db'
 import { red } from "@material-ui/core/colors";
 
-export const SummariesPOSList = props => {
-    const label = props.options.label;
-    console.log('######## load 1 #############')
-    return (
-        <List {...props} title={"Lista Aggregati"}>
-            <Datagrid rowClick={"show"}>
-                <DateField source={"date"}/>
-                <NumberField source={"masterCard"}/>
-                <FunctionField label="+/-"  render = {async function render() {return  await difference(this.record, 'masterCard')}}/>
-                <NumberField source={"maestro"}/>
-                <NumberField source={"visa"}/>
-                <NumberField source={"amex"}/>
-                <NumberField source={"pagobancomat"}/>
-            </Datagrid>
-        </List>
-    )
-};
-
-
-const useStyles = makeStyles({
-    small: { color: 'green' },
-    big: { color: 'red' },
-});
-
-async function difference(record, payment){
-    console.log('record', record)
-    console.log('payment', payment)
-    let summaryValue = 0;
-    let reportValue = 0;
-    let summaryRef = db.ref('summariesPOS').child(record.date).child(payment)
-    let reportRef = db.ref('reportPOS').child(record.date).child(payment)
-    let difference =   getDifference (summaryRef, reportRef); 
-    console.log('difference to return: ', difference)
-    let id = record.date + '' + payment
-    console.log(id)
-    return (
-        <p id = {id}>{difference}</p>
-    )
+class SummariesPOSList extends React.Component { 
+    constructor(props){
+        super(props);
+        this.state= {
+            reportObj : null
+        }
+    };
     
-};
+    componentDidMount(){
+        let reportObj;
+        let reportRef = db.ref('reportPOS')
+        reportRef.ref.once('value', reportSnap => {
+            this.setState({reportObj : reportSnap.val()})
+            console.log(this.state.reportObj)
+        });
+    }
+    render(){
+         return (
+            <List {...this.props} title={"Lista Aggregati"}>
+                <Datagrid rowClick={"show"}>
+                    <DateField source={"date"}/>
+                    <NumberField source={"masterCard"}/>
+                    <FunctionField label="+/-"  render = {record => getFromState(record, this.state.reportObj, 'masterCard')}/>
+                    <NumberField source={"maestro"}/>
+                    <FunctionField label="+/-"  render = {record => getFromState(record, this.state.reportObj, 'maestro')}/>
+                    <NumberField source={"visa"}/>
+                    <FunctionField label="+/-"  render = {record => getFromState(record, this.state.reportObj, 'visa')}/>
+                    <NumberField source={"amex"}/>
+                    <FunctionField label="+/-"  render = {record => getFromState(record, this.state.reportObj, 'amex')}/>
+                    <NumberField source={"pagobancomat"}/>
+                    <FunctionField label="+/-"  render = {record => getFromState(record, this.state.reportObj, 'pagobancomat')}/>
+                </Datagrid>
+            </List>
+        )
+    }
+    
+}
+
 
 function convertToNumber(number){
     return number==null? 0 : parseFloat(number)
 }
 
- function getDifference(summaryRef, reportRef){
-    summaryRef.once('value', summarySnap => {
-        reportRef.ref.once('value', reportSnap => {
-            return difference = convertToNumber(reportSnap.val()) - convertToNumber(summarySnap.val());
-        }) 
-    });
-}
 
-function test(){
+function getFromState(record ,reportObj, payment){
+    let difference = 0;
+    let summaryVal = convertToNumber(record[payment]);
+    let reportVal =  reportObj[record.date] ? convertToNumber(reportObj[record.date][payment])   : 0
+    console.log('source', summaryVal)
+    console.log('value from report',reportVal);
+    difference = reportVal - summaryVal
+    console.log('difference', difference)
     return (
-        <p >difference</p>
+        <p >{difference}</p>
     )
 }
+
+export default SummariesPOSList;

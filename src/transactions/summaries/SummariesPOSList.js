@@ -13,7 +13,7 @@ export const SummariesPOSList = props => {
             <Datagrid rowClick={"show"}>
                 <DateField source={"date"}/>
                 <NumberField source={"masterCard"}/>
-                <FunctionField label="+/-" render = {record => test_difference(record, 'masterCard')} />
+                <FunctionField label="+/-"  render = {async function render() {return  await difference(this.record, 'masterCard')}}/>
                 <NumberField source={"maestro"}/>
                 <NumberField source={"visa"}/>
                 <NumberField source={"amex"}/>
@@ -29,35 +29,37 @@ const useStyles = makeStyles({
     big: { color: 'red' },
 });
 
- async function difference(record, payment){
+async function difference(record, payment){
     console.log('record', record)
     console.log('payment', payment)
     let summaryValue = 0;
-    let difference = 0;
     let reportValue = 0;
     let summaryRef = db.ref('summariesPOS').child(record.date).child(payment)
     let reportRef = db.ref('reportPOS').child(record.date).child(payment)
-    difference = await getDifference (summaryRef, reportRef); 
+    let difference =   getDifference (summaryRef, reportRef); 
     console.log('difference to return: ', difference)
+    let id = record.date + '' + payment
+    console.log(id)
     return (
-        <p>{difference}</p>
-    );
+        <p id = {id}>{difference}</p>
+    )
+    
 };
 
 function convertToNumber(number){
     return number==null? 0 : parseFloat(number)
 }
 
-async function getDifference(summaryRef, reportRef){
+ function getDifference(summaryRef, reportRef){
     summaryRef.once('value', summarySnap => {
         reportRef.ref.once('value', reportSnap => {
-            difference = convertToNumber(reportSnap.val()) - convertToNumber(summarySnap.val());
+            return difference = convertToNumber(reportSnap.val()) - convertToNumber(summarySnap.val());
         }) 
     });
 }
 
-function test_difference(){
+function test(){
     return (
-        <p>gnagna</p>
+        <p >difference</p>
     )
 }

@@ -95,7 +95,7 @@ function App() {
                 options={{label: 'Terracina', id: 'terracina'}}
                 list={TransactionList}
                 edit={TransactionEdit}
-                show={TransactionShow}
+                show={TransactionEdit}
                 create={TransactionCreate}
             />
             <Resource

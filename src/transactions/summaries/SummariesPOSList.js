@@ -84,13 +84,18 @@ function getFromState(record ,reportObj, payment){
     let reportVal =  reportObj[record.date] ? convertToNumber(reportObj[record.date][payment])  : 0
     console.log('source', summaryVal)
     console.log('value from report',reportVal);
+    if (reportVal === 0) {
+        return (
+            <p >non presente</p>
+        ) 
+    }
     difference = reportVal - summaryVal
     console.log('difference', difference)
         return (
-            <p >{convertToNumber(difference)}</p>
+            <p>{convertToNumber(difference)}</p>
         )
     } else return (
-        <p >errore nella lettura del report</p>
+        <p >errore</p>
     )
 }
 

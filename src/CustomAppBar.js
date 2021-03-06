@@ -33,7 +33,7 @@ const CustomAppBar = props => {
             />
             <span className={classes.spacer}/>
             <CSVReader
-                onFileLoaded={(data, fileInfo) => readReportPOS(data) /*console.dir(data, fileInfo)*/}/>
+                onFileLoaded={(data, fileInfo) => readReportPOS(data)}/>
         </AppBar>
     );
 };
@@ -41,33 +41,34 @@ const CustomAppBar = props => {
 function readReportPOS(data) {
     let reportObj = new Map()
     data.map((record, index) => {
-        let description = record[2]
-        let amount = record[3]
-        let descObject = readDescription(description);
+        if( record.length >  1 ){
+            let description = record[2]
+            let amount = record[3]
+            let descObject = readDescription(description);
 
-        if (descObject) {
-            let paymentType = descObject.paymentType;
-            let date = descObject.date;
-            const key = date + '.' + paymentType
+            if (descObject) {
+                let paymentType = descObject.paymentType;
+                let date = descObject.date;
+                const key = date + '.' + paymentType
 
-            if (reportObj.has(key)) {
-                let existingObject = reportObj.get(key)
-                let sum = (existingObject[date][paymentType]) + convertToNumber(amount.replaceAll('.',''));
-                existingObject = {[date]:{...existingObject[date], [paymentType]: sum}}
-                reportObj.delete(key)
-                reportObj.set(key, existingObject)
-            } else {
-                let obj = {
-                    [date]: {
-                        [paymentType]: convertToNumber(amount.replaceAll('.','')),
-                        date: date,
-                        id: date
+                if (reportObj.has(key)) {
+                    let existingObject = reportObj.get(key)
+                    let sum = (existingObject[date][paymentType]) + convertToNumber(amount.replaceAll('.',''));
+                    existingObject = {[date]:{...existingObject[date], [paymentType]: sum}}
+                    reportObj.delete(key)
+                    reportObj.set(key, existingObject)
+                } else {
+                    let obj = {
+                        [date]: {
+                            [paymentType]: convertToNumber(amount.replaceAll('.','')),
+                            date: date,
+                            id: date
+                        }
                     }
+                    reportObj.set(key, obj)
                 }
-                reportObj.set(key, obj)
             }
         }
-
     })
 
     reportObj.forEach((value,key) => {
@@ -127,12 +128,9 @@ function convertToNumber(number) {
 
 
 function readDescription(description) {
-
     if (description.includes('INCASSO POS')) {
-
         let date;
         let paymentType;
-
         if (description.includes(AMEX)) {
             date = getCommonDate(description);
             paymentType = 'amex';
@@ -149,7 +147,6 @@ function readDescription(description) {
             date = getPagobancomatDate(description)
             paymentType = 'pagobancomat'
         }
-
         return {
             date: date,
             paymentType: paymentType

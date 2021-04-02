@@ -119,7 +119,7 @@ function App() {
             />
             <Resource
                 name={"reportPOS"}
-                options={{label: 'Report POS', id: 'reportPOS'}}
+                options={{label: 'Report Banca', id: 'reportPOS'}}
                 list={TransactionList}
                 edit={TransactionEdit}
                 show={TransactionShow}

@@ -101,6 +101,26 @@ export const TransactionForm = props => {
              return (
              <TerracinaForm {...props} />
                 )
+        case "castro-self" :
+            return (
+                <CastroForm {...props} />
+            )
+        case "patrica-self" :
+            return (
+                <PatricaForm {...props} />
+            )
+        case "sonnino-self" :
+            return (
+                <SonninoForm {...props} />
+            )
+        case "prossedi-self" :
+            return (
+                <ProssediForm {...props} />
+            )
+        case "terracina-self" :
+                return (
+                <TerracinaForm {...props} />
+                )
         case "reportPOS" :
         return (
             <ReportPOSForm {...props} />

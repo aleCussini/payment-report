@@ -107,7 +107,55 @@ function App() {
                 show={TransactionEdit}
                 create={TransactionCreate}
             />
-             <Divider variant="inset"/>
+            
+            {/* self */}
+            
+            <Resource
+                name={"castro-self"}
+                options={{label: 'SELF Castro dei Volsci', id: 'castro-self'}}
+                icon={EniIcon}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionEdit}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"patrica-self"}
+                options={{label: 'SELF Patrica', id: 'patrica-self'}}
+                icon={EniIcon}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionEdit}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"sonnino-self"}
+                options={{label: 'SELF Sonnino', id: 'sonnino-self'}}
+                icon={EniIcon}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionEdit}
+                create={TransactionCreate}
+            />
+            <Resource
+                name= {"terracina-self"}
+                icon={EniIcon}
+                options={{label: 'SELF Terracina', id: 'terracina-self'}}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionEdit}
+                create={TransactionCreate}
+            />
+            <Resource
+                name={"prossedi-self"}
+                options={{label: 'SELF Prossedi', id: 'prossedi-self'}}
+                icon={Q8Icon}
+                list={TransactionList}
+                edit={TransactionEdit}
+                show={TransactionEdit}
+                create={TransactionCreate}
+            />
+            
             
             <Resource
                 name={"summariesPOS"}
